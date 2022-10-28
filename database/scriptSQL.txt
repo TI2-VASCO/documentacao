@@ -1,0 +1,72 @@
+CREATE DATABASE projetoilumina
+CREATE USER admIlumina WITH ENCRYPTED PASSWORD 'adm@Ilumina';
+GRANT ALL PRIVILEGES ON DATABASE projetoilumina TO admIlumina;
+
+
+CREATE TABLE Instituicao (
+    InstituicaoID INT NOT NULL PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Senha VARCHAR(255) NOT NULL,
+    CNPJ CHAR(14) NOT NULL,
+    Telefone (11) NOT NULL,
+    CEP CHAR(8) NOT NULL,
+    Endereco VARCHAR(255) NOT NULL,
+    Imagem BYTEA,
+    Descricao VARCHAR(255)
+)
+
+CREATE TABLE Doador (
+    DoadorID INT NOT NULL PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Senha VARCHAR(255) NOT NULL,
+    CPF CHAR(14) NOT NULL,
+    Telefone (11) NOT NULL,
+    CEP CHAR(8) NOT NULL,
+    Endereco VARCHAR(255) NOT NULL,
+    Imagem BYTEA
+)
+
+CREATE TABLE Comentario (
+    ComentarioID int NOT NULL PRIMARY KEY,
+    Texto VARCHAR(255) NOT NULL,
+    Data TIMESTAMP NOT NULL,
+    SuperComentarioID INT,
+    DoadorID INT NOT NULL,
+    ProjetoID INT NOT NULL,
+    CONSTRAINT FK_Comentario 
+        FOREIGN KEY(SuperComentarioID) 
+            REFERENCES Comentario(ComentarioID),
+    CONSTRAINT FK_Doador
+        FOREIGN KEY(DoadorID) 
+            REFERENCES Doador(DoadorID),
+    CONSTRAINT FK_Projeto
+        FOREIGN KEY(ProjetoID)
+            REFERENCES Projeto(ProjetoID)
+)
+
+CREATE TABLE Projeto (
+    ProjetoID INT NOT NULL PRIMARY KEY,
+    Descricao VARCHAR(255) NOT NULL,
+    Imagem BYTEA,
+    InstituicaoID INT NOT NULL,
+    CONSTRAINT FK_instituicao
+        FOREIGN KEY (InstituicaoID)
+            REFERENCES Instituicao(InstituicaoID)
+)
+
+CREATE TABLE Doacao (
+    DoacaoID INT NOT NULL PRIMARY KEY,
+    Data TIMESTAMP NOT NULL,
+    Valor DOUBLE NOT NULL,
+    DoadorID INT NOT NULL,
+    CONSTRAINT FK_Doador
+        FOREIGN KEY (DoadorID)
+            REFERENCES Doador(DoacaoID)
+)
+
+CREATE TABLE Categoria (
+    CategoriaID INT NOT NULL PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL
+)
